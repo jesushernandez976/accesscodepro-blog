@@ -4,7 +4,7 @@ import userRouter from "./routes/user.route.js";
 import postRouter from "./routes/post.route.js";
 import commentRouter from "./routes/comment.route.js";
 import webhookRouter from "./routes/webhook.route.js";
-import { clerkMiddleware, requireAuth } from "@clerk/express";
+import { clerkMiddleware } from "@clerk/express";
 import cors from "cors";
 import nodemailer from "nodemailer";
 import https from "https";
@@ -46,9 +46,6 @@ app.use((error, req, res, next) => {
   });
 });
 
-
-
-// Middleware
 
 
 // Function to verify reCAPTCHA
