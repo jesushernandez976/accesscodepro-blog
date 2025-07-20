@@ -16,6 +16,7 @@ const PORT = process.env.PORT || 5000;
 import dotenv from 'dotenv';
 dotenv.config();
 
+app.use(bodyParser.json());
 
 // app.use("/email", emailRouter);
 app.use(cors(process.env.CLIENT_URL));
@@ -49,7 +50,7 @@ app.use((error, req, res, next) => {
 
 
 // Middleware
-app.use(bodyParser.json());
+
 
 // Function to verify reCAPTCHA
 function verifyRecaptcha(token) {
@@ -152,8 +153,6 @@ app.post('/send-email', async (req, res) => {
     return res.status(500).json({ error: 'Server error during verification. Please try again.' });
   }
 });
-
-
 
 
 app.listen(PORT, () => {
