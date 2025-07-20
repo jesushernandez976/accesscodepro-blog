@@ -18,7 +18,6 @@ dotenv.config();
 
 app.use(bodyParser.json());
 
-// app.use("/email", emailRouter);
 app.use(cors(process.env.CLIENT_URL));
 app.use(clerkMiddleware());
 app.use("/webhooks", webhookRouter);
