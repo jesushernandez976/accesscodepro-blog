@@ -153,9 +153,7 @@ app.post('/send-email', async (req, res) => {
   }
 });
 
-app.get("*", (req, res) => {
-  res.status(404).json({ message: "API endpoint not found" });
-});
+
 
 
 app.listen(PORT, () => {
