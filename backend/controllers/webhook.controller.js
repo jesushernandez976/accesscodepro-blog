@@ -23,6 +23,9 @@ export const clerkWebHook = async (req, res) => {
     });
   }
 
+  console.log("Incoming Headers:", headers);
+  console.log("Incoming Body Buffer:", payload.toString());
+
   // console.log(evt.data);
 
   if (evt.type === "user.created") {
@@ -41,11 +44,13 @@ export const clerkWebHook = async (req, res) => {
       clerkUserId: evt.data.id,
     });
 
-    await Post.deleteMany({user:deletedUser._id})
-    await Comment.deleteMany({user:deletedUser._id})
+    await Post.deleteMany({ user: deletedUser._id })
+    await Comment.deleteMany({ user: deletedUser._id })
   }
 
   return res.status(200).json({
     message: "Webhook received",
   });
+
+  
 };
