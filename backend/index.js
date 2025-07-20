@@ -17,12 +17,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 
-// app.use("/email", emailRouter);
-const allowedOrigins = ["https://accesscodepro.blog"];
-
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true, // if you're using cookies or auth headers
+  origin: "https://accesscodepro.blog", 
+  methods: ["GET", "POST", "DELETE", "PATCH"],
+  credentials: true
 }));
 
 app.use(clerkMiddleware());
