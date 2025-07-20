@@ -13,15 +13,18 @@ export const clerkWebHook = async (req, res) => {
   const payload = req.body;
   const headers = req.headers;
 
+  console.log("Webhook payload received.");
+
+
   const wh = new Webhook(WEBHOOK_SECRET);
   let evt;
   try {
     evt = wh.verify(payload, headers);
-  } catch (err) {
-    res.status(400).json({
-      message: "Webhook verification failed!",
-    });
-  }
+ } catch (err) {
+  return res.status(400).json({
+    message: "Webhook verification failed!",
+  });
+}
 
   console.log("Incoming Headers:", headers);
   console.log("Incoming Body Buffer:", payload.toString());

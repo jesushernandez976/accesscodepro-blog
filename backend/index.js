@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 
 app.use(cors(process.env.CLIENT_URL));
 app.use(clerkMiddleware());
-app.use("/webhooks", webhookRouter);
+app.post("/webhooks/clerk", bodyParser.raw({ type: "application/json" }), clerkWebHook);
 app.use(express.json());
 
 app.use(function (req, res, next) {
