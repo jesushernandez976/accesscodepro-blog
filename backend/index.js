@@ -10,34 +10,27 @@ import nodemailer from "nodemailer";
 import https from "https";
 import bodyParser from "body-parser";
 
-
+const app = express();
+const PORT = process.env.PORT || 5000;
 
 import dotenv from 'dotenv';
 dotenv.config();
 
+
 // app.use("/email", emailRouter);
+app.use(cors(process.env.CLIENT_URL));
 app.use(clerkMiddleware());
 app.use("/webhooks", webhookRouter);
 app.use(express.json());
 
-const allowedOrigins = [process.env.CLIENT_URL]; // e.g. "https://accesscodepro.blog"
-
-app.use(cors({
-  origin: function(origin, callback) {
-    // allow requests with no origin like mobile apps or curl
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = `The CORS policy for this site does not allow access from origin ${origin}`;
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
-  credentials: true, // if you want to allow cookies/auth headers
-}));
-
-const app = express();
-const PORT = process.env.PORT || 5000;
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 
 app.use("/users", userRouter);
 app.use("/posts", postRouter);
