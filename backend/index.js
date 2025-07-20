@@ -18,7 +18,13 @@ dotenv.config();
 
 
 // app.use("/email", emailRouter);
-app.use(cors(process.env.CLIENT_URL));
+const allowedOrigins = ["https://accesscodepro.blog"];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true, // if you're using cookies or auth headers
+}));
+
 app.use(clerkMiddleware());
 app.use("/webhooks", webhookRouter);
 app.use(express.json());
