@@ -17,17 +17,20 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 
-app.use(cors({
-  origin: "https://accesscodepro.blog", 
-  methods: ["GET", "POST", "DELETE", "PATCH"],
-  credentials: true
-}));
-
+// app.use("/email", emailRouter);
+app.use(cors(process.env.CLIENT_URL));
 app.use(clerkMiddleware());
 app.use("/webhooks", webhookRouter);
 app.use(express.json());
 
-
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 
 app.use("/users", userRouter);
 app.use("/posts", postRouter);
