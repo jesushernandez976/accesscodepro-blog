@@ -17,11 +17,14 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 app.use(bodyParser.json());
-
-app.use(cors(process.env.CLIENT_URL));
+app.use(express.json());
+app.use(cors({
+  origin: ['https://accesscodepro.blog'], // Your actual Hostinger URL
+  credentials: true
+}));
 app.use(clerkMiddleware());
 app.use("/webhooks", webhookRouter);
-app.use(express.json());
+
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
