@@ -116,15 +116,15 @@ app.post('/send-email', async (req, res) => {
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER,      
-        pass: process.env.EMAIL_PASS       
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
       }
     });
 
     // Email options
     let mailOptions = {
       from: email,
-      to: process.env.EMAIL_USER, 
+      to: process.env.EMAIL_USER,
       subject: `New inquiry from ${name}`,
       text: `
         Name: ${name}
@@ -151,7 +151,11 @@ app.post('/send-email', async (req, res) => {
 });
 
 
-app.listen(PORT, () => {
-  connectDB();
-  console.log(`Server running on port ${PORT}`);
-});
+// app.listen(PORT, () => {
+//   connectDB();
+//   console.log(`Server running on port ${PORT}`);
+// });
+
+import serverless from 'serverless-http';
+connectDB(); // Call once at the top-level
+export const handler = serverless(app);
