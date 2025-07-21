@@ -45,7 +45,7 @@ const Navbar = () => {
         </div>
         {/* MOBILE LINK LIST */}
         <div
-          className={`w-full h-screen bg-[#0d0b02] z-50 top-16 text-white flex flex-col items-center justify-center gap-8 font-medium text-lg fixed top-0 right-0 transition-all duration-500 ease-in-out ${
+          className={`w-full h-screen bg-[#0d0b02] z-50 top-16 text-white flex flex-col items-center justify-center gap-8 font-medium text-lg fixed right-0 transition-all duration-500 ease-in-out ${
             open ? "translate-x-0" : "translate-x-full overflow-hidden"
           }`}
         >

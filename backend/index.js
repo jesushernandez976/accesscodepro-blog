@@ -151,7 +151,9 @@ app.post('/send-email', async (req, res) => {
 });
 
 
-app.listen(PORT, () => {
-  connectDB();
-  console.log(`Server running on port ${PORT}`);
-});
+// app.listen(PORT, () => {
+//   connectDB();
+//   console.log(`Server running on port ${PORT}`);
+// });
+connectDB();
+export default app;
