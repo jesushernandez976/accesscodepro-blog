@@ -1,9 +1,9 @@
 import express from "express";
-import connectDB from "../lib/connectDB.js";
-import userRouter from "../routes/user.route.js";
-import postRouter from "../routes/post.route.js";
-import commentRouter from "../routes/comment.route.js";
-import webhookRouter from "../routes/webhook.route.js";
+import connectDB from "./lib/connectDB.js";
+import userRouter from "./routes/user.route.js";
+import postRouter from "./routes/post.route.js";
+import commentRouter from "./routes/comment.route.js";
+import webhookRouter from "./routes/webhook.route.js";
 import { clerkMiddleware } from "@clerk/express";
 import cors from "cors";
 import nodemailer from "nodemailer";
@@ -151,11 +151,7 @@ app.post('/send-email', async (req, res) => {
 });
 
 
-// app.listen(PORT, () => {
-//   connectDB();
-//   console.log(`Server running on port ${PORT}`);
-// });
-
-import serverless from 'serverless-http';
-connectDB(); // Call once at the top-level
-export const handler = serverless(app);
+app.listen(PORT, () => {
+  connectDB();
+  console.log(`Server running on port ${PORT}`);
+});
