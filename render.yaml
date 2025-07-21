@@ -1,10 +1,10 @@
 services:
   - type: web
-    name: accesscodepro.blog
+    name: my-fullstack-app
     env: node
-    buildCommand: cd client && npm install && npm run build && cd ../server && npm install
+    rootDir: backend
+    buildCommand: cd ../client && npm install && npm run build && cd ../backend && npm install
     startCommand: node index.js
     envVars:
       - key: MONGO
         value: mongodb+srv://jesushernandez976:Bsp98ghYHtc664Dr@blogcluster0.kqpuesl.mongodb.net/?retryWrites=true&w=majority&appName=BlogCluster0
-    rootDir: server
