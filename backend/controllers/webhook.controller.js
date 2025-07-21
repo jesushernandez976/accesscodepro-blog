@@ -14,16 +14,19 @@ export const clerkWebHook = async (req, res) => {
     return res.status(500).json({ message: "Webhook secret needed!" });
   }
 
+  // Convert buffer to string for svix
   const payload = req.body;
+  const payloadString = payload.toString();
   const headers = req.headers;
 
-  console.log("Headers:", headers);
+  console.log("Processing webhook...");
 
   const wh = new Webhook(WEBHOOK_SECRET);
   let evt;
   
   try {
-    evt = wh.verify(payload, headers);
+    // Pass the string payload to svix
+    evt = wh.verify(payloadString, headers);
     console.log("Webhook verified successfully");
     console.log("Event type:", evt.type);
   } catch (err) {
