@@ -12,6 +12,7 @@ import bodyParser from "body-parser";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+app.use(cors(process.env.CLIENT_URL));
 app.use("/webhooks", webhookRouter);
 
 import dotenv from 'dotenv';
@@ -19,7 +20,6 @@ dotenv.config();
 
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(cors(process.env.CLIENT_URL));
 app.use(clerkMiddleware());
 
 
