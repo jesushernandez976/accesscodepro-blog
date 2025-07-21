@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: my-fullstack-app
+    name: accesscodepro.blog
     env: node
     buildCommand: cd client && npm install && npm run build && cd ../server && npm install
     startCommand: node index.js
