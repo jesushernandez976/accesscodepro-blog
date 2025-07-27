@@ -58,7 +58,7 @@ const Navbar = () => {
           <Link to="/posts?sort=popular" onClick={() => setOpen(false)}>
             Most Popular
           </Link>
-          <Link to="http://accesscodepro.com" onClick={() => setOpen(false)}>
+          <Link to="http://accesscodepro.com/services" onClick={() => setOpen(false)}>
             Services
           </Link>
           <Link to="/login" onClick={() => setOpen(false)}>
