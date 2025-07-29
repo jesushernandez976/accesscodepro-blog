@@ -9,6 +9,7 @@ import cors from "cors";
 import nodemailer from "nodemailer";
 import https from "https";
 import bodyParser from "body-parser";
+import sitemapRoutes from "./routes/sitemap.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -88,6 +89,8 @@ function verifyRecaptcha(token) {
     req.end();
   });
 }
+
+app.use("/", sitemapRoutes);
 
 // POST route to receive form data and send email
 app.post('/send-email', async (req, res) => {
