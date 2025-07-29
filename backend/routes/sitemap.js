@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import Post from '../models/Post.js'; // adjust if needed
+import Post from '../models/post.model.js'; // adjust if needed
 
 const generateSitemap = async () => {
   try {
