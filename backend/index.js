@@ -9,7 +9,6 @@ import cors from "cors";
 import nodemailer from "nodemailer";
 import https from "https";
 import bodyParser from "body-parser";
-import sitemapRoute from './routes/sitemap.js';
 
 
 const app = express();
@@ -21,7 +20,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 
-app.use('/', sitemapRoute);
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(clerkMiddleware());
