@@ -114,9 +114,9 @@ const PostMenuActions = ({ post }) => {
     <div className="">
       <h1 className="mt-8 mb-4 text-white text-sm font-medium">Actions</h1>
       {isPending ? (
-        "Loading..."
+        ""
       ) : error ? (
-        "Saved post fetching failed!"
+        ""
       ) : (
         <div
           className="flex items-center gap-2 py-2 text-sm cursor-pointer"

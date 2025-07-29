@@ -130,6 +130,14 @@ const SinglePostPage = () => {
               </a>
             </div>
           </div>
+
+          <div className="flex items-center gap-2 text-gray-400 text-sm mb-4 mt-5">
+            <span>
+              {data.visit.toLocaleString()}{" "}
+              {data.visit === 1 ? "view" : "views"}
+            </span>
+          </div>
+
           <PostMenuActions post={data} />
           <h1 className="mt-8 mb-4 text-sm font-medium text-white">
             Categories
