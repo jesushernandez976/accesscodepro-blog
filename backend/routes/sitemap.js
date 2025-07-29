@@ -1,20 +1,17 @@
-import express from 'express';
 import fs from 'fs';
 import path from 'path';
-import Post from '../models/post.model.js';
+import Post from '../models/Post.js'; // adjust if needed
 
-const router = express.Router();
-
-router.post('/refresh-sitemap', async (req, res) => {
+const generateSitemap = async () => {
   try {
     const baseUrl = 'https://accesscodepro.blog';
     const posts = await Post.find({}).sort({ createdAt: -1 });
 
     const urls = posts.map(post => `
-  <url>
-    <loc>${baseUrl}/posts/${post.slug}</loc>
-    <lastmod>${new Date(post.updatedAt || post.createdAt).toISOString()}</lastmod>
-  </url>
+      <url>
+        <loc>${baseUrl}/posts/${post.slug}</loc>
+        <lastmod>${new Date(post.updatedAt || post.createdAt).toISOString()}</lastmod>
+      </url>
     `).join('');
 
     const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -26,12 +23,14 @@ router.post('/refresh-sitemap', async (req, res) => {
   ${urls}
 </urlset>`;
 
-    fs.writeFileSync(path.join('public', 'sitemap.xml'), sitemapXml);
-    return res.status(200).json({ message: 'Sitemap updated successfully.' });
-  } catch (error) {
-    console.error('Error updating sitemap:', error);
-    return res.status(500).json({ error: 'Failed to update sitemap.' });
-  }
-});
+    // Write sitemap.xml in project root (adjust if you want another location)
+    const sitemapPath = path.join(process.cwd(), 'sitemap.xml');
+    fs.writeFileSync(sitemapPath, sitemapXml);
 
-export default router;
+    console.log(`Sitemap generated at: ${sitemapPath}`);
+  } catch (error) {
+    console.error('Failed to generate sitemap:', error);
+  }
+};
+
+export default generateSitemap;
