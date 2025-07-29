@@ -13,21 +13,6 @@ const fetchPost = async (slug) => {
   return res.data;
 };
 
-// Utility function to trigger sitemap refresh when post is viewed
-const notifySitemapUpdate = async () => {
-  try {
-    // Only trigger in production
-    if (import.meta.env.PROD) {
-      await fetch(`${import.meta.env.VITE_API_URL}/refresh-sitemap`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-  } catch (error) {
-    console.warn('Failed to refresh sitemap:', error);
-  }
-};
-
 const SinglePostPage = () => {
   const { slug } = useParams();
 
@@ -39,9 +24,6 @@ const SinglePostPage = () => {
   // SEO: Update document head when data loads
   useEffect(() => {
     if (data) {
-      // Notify sitemap system of post access (helps with indexing)
-      notifySitemapUpdate();
-
       // Update page title
       const pageTitle = `${data.title} | Access Code Pro Blog`;
       document.title = pageTitle;
@@ -323,18 +305,6 @@ const SinglePostPage = () => {
             >
               {format(data.createdAt)}
             </time>
-            {data.updatedAt && data.updatedAt !== data.createdAt && (
-              <>
-                <span>• Updated</span>
-                <time 
-                  dateTime={new Date(data.updatedAt).toISOString()} 
-                  className="text-gray-400"
-                  itemProp="dateModified"
-                >
-                  {format(data.updatedAt)}
-                </time>
-              </>
-            )}
           </div>
           {data.desc && (
             <p className="text-gray-300 font-medium text-lg leading-relaxed" itemProp="description">
