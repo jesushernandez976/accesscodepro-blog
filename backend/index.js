@@ -6,7 +6,7 @@ import commentRouter from "./routes/comment.route.js";
 import webhookRouter from "./routes/webhook.route.js";
 import { clerkMiddleware } from "@clerk/express";
 import cors from "cors";
-import sgMail from "sendgrid/mail";
+import sgMail from "@sendgrid/mail";
 import https from "https";
 import bodyParser from "body-parser";
 
