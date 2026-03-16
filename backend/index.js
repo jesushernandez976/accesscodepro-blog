@@ -17,7 +17,7 @@ const app = express();
 import dotenv from 'dotenv';
 dotenv.config();
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 
 const PORT = process.env.PORT || 5000;
 
@@ -27,6 +27,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use(clerkMiddleware());
 app.use(cors(process.env.CLIENT_URL));
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
