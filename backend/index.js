@@ -6,10 +6,9 @@ import commentRouter from "./routes/comment.route.js";
 import webhookRouter from "./routes/webhook.route.js";
 import { clerkMiddleware } from "@clerk/express";
 import cors from "cors";
-import sgMail from "@sendgrid/mail";
 import https from "https";
 import bodyParser from "body-parser";
-
+import sgMail from "@sendgrid/mail";
 
 const app = express();
 
@@ -99,26 +98,22 @@ function verifyRecaptcha(token) {
 app.post('/send-email', async (req, res) => {
   const { name, email, phone, message, recaptchaResponse } = req.body;
 
-  if (!name || !email || !phone || !message) {
-    return res.status(400).json({ error: 'Please fill all fields' });
+  // 1. Validate all fields
+  if (!name || !email || !phone || !message || !recaptchaResponse) {
+    return res.status(400).json({ error: 'Missing fields or reCAPTCHA' });
   }
 
-  if (!recaptchaResponse) {
-    return res.status(400).json({ error: 'Please complete the reCAPTCHA verification' });
+  // 2. Verify reCAPTCHA
+  const recaptchaResult = await verifyRecaptcha(recaptchaResponse);
+  if (!recaptchaResult.success) {
+    return res.status(400).json({ error: 'reCAPTCHA failed' });
   }
 
+  // 3. Send email with SendGrid
   try {
-
-    const recaptchaResult = await verifyRecaptcha(recaptchaResponse);
-
-    if (!recaptchaResult.success) {
-      console.log('reCAPTCHA verification failed:', recaptchaResult);
-      return res.status(400).json({ error: 'reCAPTCHA verification failed.' });
-    }
-
     await sgMail.send({
       to: process.env.EMAIL_USER,
-      from: process.env.EMAIL_USER,
+      from: process.env.EMAIL_USER, // must be verified in SendGrid
       subject: `New inquiry from ${name}`,
       text: `
 Name: ${name}
@@ -126,15 +121,14 @@ Email: ${email}
 Phone: ${phone}
 
 Message:
-${message}
-`
+${message}`
     });
 
-    res.json({ message: "Email sent successfully!" });
+    return res.json({ message: 'Email sent successfully!' });
 
   } catch (error) {
-    console.error("Email sending error:", error);
-    res.status(500).json({ error: "Failed to send email" });
+    console.error('SendGrid error:', error.response?.body || error);
+    return res.status(500).json({ error: 'Failed to send email' });
   }
 });
 
