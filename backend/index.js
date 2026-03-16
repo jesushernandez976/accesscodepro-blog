@@ -101,19 +101,19 @@ app.post('/send-email', async (req, res) => {
     return res.status(400).json({ error: 'Please fill all fields' });
   }
 
-  // // Validate reCAPTCHA
-  // if (!recaptchaResponse) {
-  //   return res.status(400).json({ error: 'Please complete the reCAPTCHA verification' });
-  // }
+  // Validate reCAPTCHA
+  if (!recaptchaResponse) {
+    return res.status(400).json({ error: 'Please complete the reCAPTCHA verification' });
+  }
 
-  // try {
-  //   // Verify reCAPTCHA with Google
-  //   const recaptchaResult = await verifyRecaptcha(recaptchaResponse);
+  try {
+    // Verify reCAPTCHA with Google
+    const recaptchaResult = await verifyRecaptcha(recaptchaResponse);
 
-  //   if (!recaptchaResult.success) {
-  //     console.log('reCAPTCHA verification failed:', recaptchaResult);
-  //     return res.status(400).json({ error: 'reCAPTCHA verification failed. Please try again.' });
-  //   }
+    if (!recaptchaResult.success) {
+      console.log('reCAPTCHA verification failed:', recaptchaResult);
+      return res.status(400).json({ error: 'reCAPTCHA verification failed. Please try again.' });
+    }
 
     // Create transporter object using SMTP (example uses Gmail)
     let transporter = nodemailer.createTransport({
@@ -147,7 +147,10 @@ app.post('/send-email', async (req, res) => {
       res.json({ message: 'Email sent successfully!' });
     });
 
-  
+  } catch (error) {
+    console.error('reCAPTCHA verification error:', error);
+    return res.status(500).json({ error: 'Server error during verification. Please try again.' });
+  }
 });
 
 app.get('/ping', (req, res) => {
