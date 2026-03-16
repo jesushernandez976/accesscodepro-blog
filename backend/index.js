@@ -6,7 +6,7 @@ import commentRouter from "./routes/comment.route.js";
 import webhookRouter from "./routes/webhook.route.js";
 import { clerkMiddleware } from "@clerk/express";
 import cors from "cors";
-import nodemailer from "nodemailer";
+import sgMail from "sendgrid/mail";
 import https from "https";
 import bodyParser from "body-parser";
 
@@ -16,6 +16,8 @@ const app = express();
 
 import dotenv from 'dotenv';
 dotenv.config();
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const PORT = process.env.PORT || 5000;
 
@@ -96,60 +98,42 @@ function verifyRecaptcha(token) {
 app.post('/send-email', async (req, res) => {
   const { name, email, phone, message, recaptchaResponse } = req.body;
 
-  // Validate all required fields
   if (!name || !email || !phone || !message) {
     return res.status(400).json({ error: 'Please fill all fields' });
   }
 
-  // Validate reCAPTCHA
   if (!recaptchaResponse) {
     return res.status(400).json({ error: 'Please complete the reCAPTCHA verification' });
   }
 
   try {
-    // Verify reCAPTCHA with Google
+
     const recaptchaResult = await verifyRecaptcha(recaptchaResponse);
 
     if (!recaptchaResult.success) {
       console.log('reCAPTCHA verification failed:', recaptchaResult);
-      return res.status(400).json({ error: 'reCAPTCHA verification failed. Please try again.' });
+      return res.status(400).json({ error: 'reCAPTCHA verification failed.' });
     }
 
-    // Create transporter object using SMTP (example uses Gmail)
-    let transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
-    });
-
-    // Email options
-    let mailOptions = {
-      from: email,
+    await sgMail.send({
       to: process.env.EMAIL_USER,
+      from: process.env.EMAIL_USER,
       subject: `New inquiry from ${name}`,
       text: `
-        Name: ${name}
-        Email: ${email}
-        Phone: ${phone}
-        Message: ${message}
-      `
-    };
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
 
-    // Send email
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('Email sending error:', error);
-        return res.status(500).json({ error: 'Failed to send email' });
-      }
-      console.log('Email sent: ' + info.response);
-      res.json({ message: 'Email sent successfully!' });
+Message:
+${message}
+`
     });
 
+    res.json({ message: "Email sent successfully!" });
+
   } catch (error) {
-    console.error('reCAPTCHA verification error:', error);
-    return res.status(500).json({ error: 'Server error during verification. Please try again.' });
+    console.error("Email sending error:", error);
+    res.status(500).json({ error: "Failed to send email" });
   }
 });
 
